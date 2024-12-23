@@ -32,18 +32,36 @@ void split(char sep, char * txt, t_field * field_table);
 /*
 split takes 3 parameters : 
 	- char sep : the separator
-	- char * txt : string of characters that we want to split [Eg. : "key:ana1:ana2:ana3"]
-	- t_field * field_table : t_field pointer that will hold all the data within a line [Eg. : "[key, ana1, ana2, ana3]"]
+	- char * txt : string of characters that we want to split (Eg. : "key:ana1:ana2:ana3")
+	- t_field * field_table : t_field pointer that will hold all the data within a line (Eg. : "[key, ana1, ana2, ana3]")
 It returns nothing but stores all fields in the field_table pointer.
 */
 
 void print_fields(t_field * field_table);
 // Prints the fields from a field table.
 
+void print_tuples(char * key, t_tuple * tuple_list, t_field * schema_field_table);
+/*
+print_tuples takes 3 parameters : 
+	- char * key : the key to search in the dictionnary
+	- t_tuple * tuple_list : the dictionnary, which is a list of tuples (Eg. : [["key1", ["ana1", "ana2"]], ["key2", ["ana1", "ana2", "ana3"])
+	- t_field * schema_field_table : File schema, i.e. list of the names of the fields composing the file's lines (including the key) Eg. : "[key, ana1, ..., ana13]"
+It should display something like the following :
+"[...] mots indexés"
+"Saisir les mots recherchés : " (scanf)
+"Recherche de [key] : [échec/trouvé] ! nb comparaisons : [...]"
+If the key is found, then proceed to display the following :
+"anagramme 1: ..."
+"anagramme 2: ..."
+"anagramme 3: X" (display "X" if there is no more anagram)
+...
+"anagramme [nbFields]: X"
+*/
+
 // ----------------------------------------------------------------------
 // Functions
 
-void split(char sep, char * txt, t_field * field_table){
+void split(char sep, char * txt, t_field * schema_field_table){
     int l = strlen(txt);
     // printf("%d\n", l);
     int k = 0, i = 0, j = 0;
@@ -66,5 +84,9 @@ void print_fields(t_field * field_table){
     for (int i = 1; i < MAXFIELDS-1 ; i++){
         printf("value %d : %s\n", i, field_table[i]);
     }
+}
+
+void print_tuples(char * key, t_tuple * tuple_list, t_field * standard_field_table) {
+	
 }
 
