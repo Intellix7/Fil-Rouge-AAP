@@ -12,4 +12,5 @@ int main() {
     split(':', t, field_table);
 
     print_fields(field_table);
+    hello();
 }
