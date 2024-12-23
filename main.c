@@ -4,6 +4,10 @@
 
 int main(int argc, char ** argv) {
     
+    char finding;
+    printf("Donnez le mot à trouver :");
+    scanf("%c", &finding);
+
     // Creating the temporary string that will hold the text retrieved from the file
     char temp[MAXLEN];
      
@@ -51,6 +55,43 @@ int main(int argc, char ** argv) {
         meta.fieldNames = field_table;
         // print_fields(meta.fieldNames); 
 
+        t_tupletable * dico1 = malloc(sizeof(t_tupletable)); /*creation of the "tableau classique"*/
+        int len_dic = 0;
+        fgets(temp, MAXLEN, anagrammeFile);
+        while(strlen(temp)>0){ /* filling the keys */
+            int i = 0;
+            int j = 0; 
+            printf("%c", *temp);
+            while(temp[i] =! meta.sep){
+                dico1->tuples->key[j]=temp[i];
+                j = j+1;
+                i = i+1;
+                printf("%d %d \n", j, i);
+
+            }
+            i=i+1;
+            printf("%c", dico1->tuples->key[5]);
+            
+            while(temp[i] =! "\n"){ //filling the values
+                *(dico1->tuples->value[j])=temp[i];
+                j = j+1;
+                i = i+1;  
+            }
+        len_dic++;    
+        fgets(temp, MAXLEN, anagrammeFile);    
+        }
+        dico1->nbTuples = len_dic;
+
+
+        for(int k=0; k < dico1->nbTuples; k++){
+            if(strcmp(&finding, dico1->tuples[k].key)==0){
+                printf("%d mots indexés \n", dico1->nbTuples);
+                printf("Recherche de %c : trouvé ! nb comparaisons : %d \n", finding, k);
+                break;
+            }
+        
+        }
+         
     }
 	else {
         // Case where # is the separator.
