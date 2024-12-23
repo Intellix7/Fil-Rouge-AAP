@@ -18,7 +18,7 @@ t_value value;
 typedef struct {
 char sep;
 int nbFields;
-t_field fieldNames[MAXFIELDS];
+t_field * fieldNames;  // Here I changed the definition according to the BONUS section because it makes things easier
 } t_metadata;
 
 void hello(){
@@ -28,28 +28,26 @@ void hello(){
 // Prototypes 
 
 // ** split() ** 
-// split takes 2 parameters : 
+// split takes 3 parameters : 
 //  - char sep which is the separator
 //  - char * txt which is the string of characters that we want to split
-// It returns a t_field * object that contains the list 
-// of the different fields, including the key at the start
+//  - t_field * field_table which is a t_field pointer that will hold all the data within a line
+// It returns nothing but stores all fields in the field_table pointer
 
-t_field * split(char sep, char * txt);
+void split(char sep, char * txt, t_field * field_table);
 
 // ** print_fields() **
 // It... prints... the fields...
- 
+
 void print_fields(t_field * field_table);
 
 
 // ----------------------------------------------------------------------
 // Actual function declarations
 
-
-t_field * split(char sep, char * txt){
+void split(char sep, char * txt, t_field * field_table){
     int l = strlen(txt);
     // printf("%d\n", l);
-    t_field * field_table = malloc(sizeof(t_field) * MAXFIELDS);
     int k = 0, i = 0, j = 0;
     while ((i < l) && (k < MAXFIELDS)) {
         // printf("%d\n", i);
@@ -63,7 +61,6 @@ t_field * split(char sep, char * txt){
         i++;
         j = 0;
     }
-    return field_table;
 }
 
 void print_fields(t_field * field_table){

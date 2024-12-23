@@ -1,13 +1,16 @@
-#include "definitions.h" // Le fichier définitions.h contient toutes les fonctions utiles que l'on appellera dans main.
+// include a file that contains all type definitions and function declarations
+#include "definitions.h"
 
 
 int main(int argc, char ** argv) {
     
+    // Creating the temporary string that will hold the text retrieved from the file
     char temp[MAXLEN];
-
+     
+    // variable containing the metadatas from the file
     t_metadata meta; 
     
-	// On vérifie que l'utilisateur a bien correctement rentré le nom du fichier.
+    // halts the program if the user uses the wrong syntax
     if (argc<2) {
         printf("Utilisation :\n./programme <nom du fichier>\n");
         exit(EXIT_FAILURE);
@@ -15,37 +18,55 @@ int main(int argc, char ** argv) {
     
     FILE * anagrammeFile = fopen(argv[1], "r");
 
-	// On copie des lignes du fichier anagramme jusqu'à ce qu'on obtienne la ligne du séparateur.
+    // Retrieves the separator from the file
+    // A line is only read if it contains only one character
     fgets(temp, MAXLEN, anagrammeFile);
     while (strlen(temp) > 2){
         fgets(temp, MAXLEN, anagrammeFile);
     }
-	
-	// On attrape le séparateur.
     meta.sep = *temp;
-	
-	// On règle le cas où le séparateur est "#"
-    fgets(temp, MAXLEN, anagrammeFile);
+    // printf("%c\n", meta.sep);
+
+    // if the # is not the separator, then it means we have to ignore every line starting with #
     if (meta.sep != '#') {
+        fgets(temp, MAXLEN, anagrammeFile);
         while (temp[0] == '#') {
             fgets(temp, MAXLEN, anagrammeFile);
         }
-		
-		// On attrape le nombre de champs que l'on convertit en entier avec "atoi".
+        // Retrieves the number of fields
         meta.nbFields = atoi(temp);
-		
-		// De même, on saute toute les lignes qui sont des commentaires jusqu'à la ligne qui donne la table des champs.
+        // printf("%d", meta.nbFields);
+
+        // This variable represents a list of fields 
+        t_field * field_table = malloc(sizeof(t_field) * meta.nbFields); 
+
         fgets(temp, MAXLEN, anagrammeFile);
+        // Then again, we ignore lines starting with #
             while (temp[0] == '#') {
                 fgets(temp, MAXLEN, anagrammeFile);
             }
-		
-		// On attrape la table des champs qu'on sépare et qu'on implémente dans un tableau [clé, liste_champs]
-        t_field * field_table;    
-        field_table = split(meta.sep, temp);
+
+        // Retrieves the fieldNames  
+        split(meta.sep, temp, field_table);
+        meta.fieldNames = field_table;
+        // print_fields(meta.fieldNames); 
 
     }
-	// À ajouter cas où meta.sep == '#'...
+	else {
+        // Case where # is the separator.
+        // We then assume that there are no comment line after the separator declaration
+        fgets(temp, MAXLEN, anagrammeFile);
+        meta.nbFields = atoi(temp);
+        fgets(temp, MAXLEN, anagrammeFile);
+
+        // This variable represents a list of fields
+        t_field * field_table = malloc(sizeof(t_field) * meta.nbFields); 
+        
+        split(meta.sep, temp, field_table);
+        meta.fieldNames = field_table;
+    }
+
+
 	
     fclose(anagrammeFile);
 
