@@ -4,6 +4,7 @@
 
 #define MAXLEN 1000
 #define MAXFIELDS 15
+#define MAXTUPLES 60000
 
 
 // ----------------------------------------------------------------------
@@ -24,6 +25,11 @@ typedef struct {
 	t_field * fieldNames;  // Here, the definition was changed according to the BONUS section because it makes things easier.
 } t_metadata;
 
+#define MAXTUPLES 60000
+typedef struct {
+    t_tuple tuples[MAXTUPLES]; // tableau des tuples
+    int nbTuples; // nb mots saisis
+    } t_tupletable;
 
 // ----------------------------------------------------------------------
 // Prototypes & documentation
