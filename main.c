@@ -8,7 +8,7 @@ int main(int argc, char ** argv) {
     char temp[MAXLEN];
      
     // variable containing the metadatas from the file
-    // t_metadata meta; 
+    t_metadata meta; 
     
     // halts the program if the user uses the wrong syntax
     if (argc<2) {
