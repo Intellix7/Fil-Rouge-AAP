@@ -29,7 +29,8 @@ typedef struct {
 typedef struct {
     t_tuple tuples[MAXTUPLES];  // Table of tuples
     int nbTuples;               // Number of words stored
-    } t_tupletable;
+} t_tupletable;
+
 
 // ----------------------------------------------------------------------
 // Prototypes & documentation
@@ -43,20 +44,18 @@ split takes 3 parameters :
 It returns nothing but stores all fields in the field_table pointer.
 */
 
-void print_fields(t_field * field_table);
-// Prints the fields from a field table.
-
-void print_tuples(char * key, t_tuple * tuple_list, t_field * schema_field_table);
+void print_tuples(t_metadata data, t_tupletable * dico);
 /*
-print_tuples takes 3 parameters : 
-	- char * key : the key to search in the dictionnary
-	- t_tuple * tuple_list : the dictionnary, which is a list of tuples (Eg. : [["key1", ["ana1", "ana2"]], ["key2", ["ana1", "ana2", "ana3"])
-	- t_field * schema_field_table : File schema, i.e. list of the names of the fields composing the file's lines (including the key) Eg. : "[key, ana1, ..., ana13]"
+print_tuples takes 2 parameters : 
+	- t_metadata data : it allows to access fieldNames, nbFields and key.
+	- t_tupletable * dico : pointer towards the dictionnary, which is a list of tuples (Eg. : [["key1", ["ana1", "ana2"]], ["key2", ["ana1", "ana2", "ana3"]]])
+
 It should display something like the following :
 "[...] mots indexés"
 "Saisir les mots recherchés : " (scanf)
 "Recherche de [key] : [échec/trouvé] ! nb comparaisons : [...]"
 If the key is found, then proceed to display the following :
+"mot : ..."
 "anagramme 1: ..."
 "anagramme 2: ..."
 "anagramme 3: X" (display "X" if there is no more anagram)
@@ -95,14 +94,38 @@ void split(char sep, char * txt, int nbFields, t_key key, t_field * schema_field
     }
 }
 
-// void print_fields(t_field * field_table){
-//     printf("key : %s\n", field_table[0]);
-//     for (int i = 1; i < MAXFIELDS-1 ; i++){
-//         printf("value %d : %s\n", i, field_table[i]);
-//     }
-// }
-
-void print_tuples(char * key, t_tuple * tuple_list, t_field * standard_field_table) {
+void print_tuples(t_metadata data, t_tupletable * dico) {
+	char * key; // Word to search in dictionnary.
 	
+	printf("%d mots indexés\n", dico->nbTuples);
+	printf("Saisir les mots recherchés : ");
+	scanf("%s", *key);
+	printf("\n");
+
+	int index_key = 0;
+	int found = 0;
+	for (int i = 0; i < dico->nbTuples; i++) {
+		if (strcmp(key, dico->tuples[i].key) == 0) { // Looking for the key inside the dictionnary. strcmp checks if 2 strings are equal and returns 0 if that's the case.
+			found = 1;
+			break;
+		}
+		index_key += 1;
+	}
+	if (found != 0) {
+		printf("Recherche de %s : échec ! nb comparaisons : %d\n", key, index_key);
+	}
+	else {
+		printf("Recherche de %s : trouvé ! nb comparaisons : %d\n", key, index_key);
+		printf("%s : %s\n", data.key, key); // mot : key
+		
+		for (int k = 1; k < data.nbFields; k++) {
+			if (dico->tuples[index_key].value[k] != '') {
+				printf("%s: %s", data.fieldNames[k], dico->tuples[index_key].value[k]); // anagramme k: ...
+			}
+			else {
+				printf("%s: X", data.fieldNames[k]); // anagramme k: X
+			}
+		}
+	}		
 }
 
