@@ -22,19 +22,19 @@ typedef struct {
 typedef struct {
 	char sep;
 	int nbFields;
+    t_key key;
 	t_field * fieldNames;  // Here, the definition was changed according to the BONUS section because it makes things easier.
 } t_metadata;
 
-#define MAXTUPLES 60000
 typedef struct {
-    t_tuple tuples[MAXTUPLES]; // tableau des tuples
-    int nbTuples; // nb mots saisis
+    t_tuple tuples[MAXTUPLES];  // Table of tuples
+    int nbTuples;               // Number of words stored
     } t_tupletable;
 
 // ----------------------------------------------------------------------
 // Prototypes & documentation
 
-void split(char sep, char * txt, t_field * field_table);
+void split(char sep, char * txt, int nbFields, t_key key, t_field * schema_field_table);
 /*
 split takes 3 parameters : 
 	- char sep : the separator
@@ -67,15 +67,25 @@ If the key is found, then proceed to display the following :
 // ----------------------------------------------------------------------
 // Functions
 
-void split(char sep, char * txt, t_field * schema_field_table){
+void split(char sep, char * txt, int nbFields, t_key key, t_field * schema_field_table){
     int l = strlen(txt);
     // printf("%d\n", l);
     int k = 0, i = 0, j = 0;
-    while ((i < l) && (k < MAXFIELDS)) {
+
+    while ((txt[i] != sep) && (txt[i] != '\0')){
+            // printf("%c, %d\n", txt[i], i);
+            key[i] = txt[i];
+            i++;
+    }
+
+    key[i] = '\0';
+
+
+    while ((i < l) && (k < nbFields)) {
         // printf("%d\n", i);
         while ((txt[i] != sep) && (txt[i] != '\0')){
             // printf("%c, %d\n", txt[i], i);
-            field_table[k][j] = txt[i];
+            schema_field_table[k][j] = txt[i];
             j++;
             i++;
         }
@@ -85,12 +95,12 @@ void split(char sep, char * txt, t_field * schema_field_table){
     }
 }
 
-void print_fields(t_field * field_table){
-    printf("key : %s\n", field_table[0]);
-    for (int i = 1; i < MAXFIELDS-1 ; i++){
-        printf("value %d : %s\n", i, field_table[i]);
-    }
-}
+// void print_fields(t_field * field_table){
+//     printf("key : %s\n", field_table[0]);
+//     for (int i = 1; i < MAXFIELDS-1 ; i++){
+//         printf("value %d : %s\n", i, field_table[i]);
+//     }
+// }
 
 void print_tuples(char * key, t_tuple * tuple_list, t_field * standard_field_table) {
 	
