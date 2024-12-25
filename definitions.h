@@ -8,23 +8,23 @@
 
 
 // ----------------------------------------------------------------------
-// Types 
+// 1. TYPES 
 
-typedef char t_field[1000];
-typedef t_field t_key;
-typedef t_field t_value[MAXFIELDS];
+typedef char t_field[MAXLEN];			// A field is a string of max. 1000 characters.
+typedef t_field t_key;					// A key is a field.
+typedef t_field t_value[MAXFIELDS];		// t_value is a list of max. 60000 fields.
 
 typedef struct {
+	char sep;				// Character which separates a field from another one.
+	int nbFields;			// Max number of fields contained in a line.
+    t_key key;				// The key label (Eg. for anagrammes.dat, the key label is "mot")
+	t_field * fieldNames;	// The list of the field-name-labels (Eg. for anagrammes.dat, it is : ["anagramme1", "anagramme2", ..., "anagramme13"])
+} t_metadata;
+
+typedef struct {		// A tuple contains a key and a list of fields associated to this key.
 	t_key key;
 	t_value value;
 } t_tuple;
-
-typedef struct {
-	char sep;
-	int nbFields;
-    t_key key;
-	t_field * fieldNames;  // Here, the definition was changed according to the BONUS section because it makes things easier.
-} t_metadata;
 
 typedef struct {
     t_tuple tuples[MAXTUPLES];  // Table of tuples
@@ -33,46 +33,52 @@ typedef struct {
 
 
 // ----------------------------------------------------------------------
-// Prototypes & documentation
+// 2. PROTOTYPES AND DOCUMENTATION
 
 void split(char sep, char * txt, int nbFields, t_key key, t_field * schema_field_table);
 /*
-split takes 3 parameters : 
+split takes 5 parameters : 
 	- char sep : the separator
 	- char * txt : string of characters that we want to split (Eg. : "key:ana1:ana2:ana3")
-	- t_field * field_table : t_field pointer that will hold all the data within a line (Eg. : "[key, ana1, ana2, ana3]")
-It returns nothing but stores all fields in the field_table pointer.
+	- int nbFields : the max number of fields contained in a line.
+	- t_key key : field which awaits for the key to be stored in it...
+	- t_field * schema_field_table : list of fields which awaits for all the fields to be stored in it...
+	
+It returns nothing but stores the key & all the field names from "txt" in "key" and "schema_field_table".
 */
 
 void print_tuples(t_metadata data, t_tupletable * dico);
 /*
 print_tuples takes 2 parameters : 
 	- t_metadata data : it allows to access fieldNames, nbFields and key.
-	- t_tupletable * dico : pointer towards the dictionnary, which is a list of tuples (Eg. : [["key1", ["ana1", "ana2"]], ["key2", ["ana1", "ana2", "ana3"]]])
+	- t_tupletable * dico : pointer towards the dictionnary, which is a list of tuples. Eg. : [[key1, [ana1.1, ana1.2]], [key2, [ana2.1, ana2.2, ana2.3]]]
+
 
 It should display something like the following :
 "[...] mots indexés"
 "Saisir les mots recherchés : " (scanf)
-"Recherche de [key] : [échec/trouvé] ! nb comparaisons : [...]"
-If the key is found, then proceed to display the following :
+--> If the key is found, then proceed to display the following :
+"Recherche de [key] : trouvé ! nb comparaisons : [...]"
 "mot : ..."
 "anagramme 1: ..."
 "anagramme 2: ..."
 "anagramme 3: X" (display "X" if there is no more anagram)
 ...
 "anagramme [nbFields]: X"
+
+--> If the key is not found, then proceed to display the following :
+"Recherche de [key] : échec ! nb comparaisons : [...]"
 */
 
+
 // ----------------------------------------------------------------------
-// Functions
+// 3. FUNCTIONS
 
 void split(char sep, char * txt, int nbFields, t_key key, t_field * schema_field_table){
-    int l = strlen(txt);
-    // printf("%d\n", l);
+    int l = strlen(txt);	// strlen gives the length of whole string given in parameters.
     int k = 0, i = 0, j = 0;
 
     while ((txt[i] != sep) && (txt[i] != '\0')){
-            // printf("%c, %d\n", txt[i], i);
             key[i] = txt[i];
             i++;
     }
@@ -81,9 +87,7 @@ void split(char sep, char * txt, int nbFields, t_key key, t_field * schema_field
 
 
     while ((i < l) && (k < nbFields)) {
-        // printf("%d\n", i);
         while ((txt[i] != sep) && (txt[i] != '\0')){
-            // printf("%c, %d\n", txt[i], i);
             schema_field_table[k][j] = txt[i];
             j++;
             i++;
