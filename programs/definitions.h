@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #define MAXLEN 1000
 #define MAXFIELDS 15
@@ -9,7 +10,6 @@
 
 // ----------------------------------------------------------------------
 // 1. TYPES 
-
 typedef char t_field[MAXLEN];			// A field is a string of max. 1000 characters.
 typedef t_field t_key;					// A key is a field.
 typedef t_field t_value[MAXFIELDS];		// t_value is a list of max. 60000 fields.
@@ -31,9 +31,24 @@ typedef struct {
     int nbTuples;               // Number of words stored
 } t_tupletable;
 
+typedef struct node {
+t_tuple data;
+struct node *pNext;
+} t_node;
+
+typedef t_node * t_list;
+
+typedef struct {
+char * hashfunction; // nom de la fonction de hachage
+int nbSlots; // nombre d’alvéoles
+t_list * slots; // taille définie à l'exécution
+} t_hashtable;
+
 
 // ----------------------------------------------------------------------
 // 2. PROTOTYPES AND DOCUMENTATION
+
+// 2.1 HELPER FUNCTIONS
 
 void split(char sep, char * txt, int nbFields, t_key key, t_field * schema_field_table);
 /*
@@ -71,9 +86,30 @@ It should display something like the following :
 "Recherche de [key] : échec ! nb comparaisons : [...]"
 */
 
+// 2.2 CHAINED LIST FUNCTIONS
+
+int isEmpty(t_list li);
+t_tuple getFirstVal(t_list li);
+// void showList(t_list li);
+t_list newList();
+t_list addHeadNode(t_tuple data, t_list li);
+t_list removeHeadNode(t_list li);
+
+
+// 2.3 HASH FUNCTIONS
+
+int first_ASCII(t_key key, t_hashtable hash);
+/* 	first_ASCII takes two parameters : 
+	- a key
+	- a t_hashtable object holding the information about the hashtable
+Returns the ASCII code of its first character mod 
+[the number of hash slots defined in the console arguments]  
+*/
 
 // ----------------------------------------------------------------------
 // 3. FUNCTIONS
+
+// 3.1 HELPER FUNCTIONS
 
 void split(char sep, char * txt, int nbFields, t_key key, t_field * schema_field_table){
     int l = strlen(txt);	// strlen gives the length of whole string given in parameters.
@@ -134,3 +170,49 @@ void print_tuples(t_metadata data, t_tupletable * dico, char * key) {
 	}		
 }
 
+// 3.2 CHAINED LIST FUNCTIONS
+
+int isEmpty(t_list li){
+    return (li == NULL);
+}
+
+t_tuple getFirstVal(t_list li) {
+    assert(!isEmpty(li));
+    return li->data;
+}
+
+// void showList(t_list li){
+//     int k = 0;
+//     printf("*** affichage de la liste ***\n");
+//     while (li != NULL){
+//         printf("Maillon %d, Valeur = %.1f\n", k, li->val);
+//         li = li->p;
+//         k++;
+//     }
+// }
+
+t_list newList(){
+    t_list li = NULL;
+    return li;
+}
+
+t_list addHeadNode(t_tuple data, t_list li){
+    t_node * n = malloc(sizeof(t_node));
+    n->data = data;
+    n->pNext = li;
+    return n;
+
+}
+
+t_list removeHeadNode(t_list li){
+    assert(!isEmpty(li));
+    t_list p = li->pNext;
+    free(li);
+    return p;
+}
+
+// 3.3 HASH FUNCTIONS 
+
+int first_ASCII(t_key key, t_hashtable hash){
+	return (int)(key[0] % hash.nbSlots);
+}
