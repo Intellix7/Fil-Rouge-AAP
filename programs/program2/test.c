@@ -8,4 +8,7 @@ int main() {
     t_key key = "hello";
     int h = first_ASCII(key, hash);
     printf("%d\n", h);
+
+    hash.slots = malloc(sizeof(t_list) * hash.nbSlots);
+    printf("%d", strlen("a"));
 }

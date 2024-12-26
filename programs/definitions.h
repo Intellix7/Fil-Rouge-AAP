@@ -39,12 +39,12 @@ struct node *pNext;
 typedef t_node * t_list;
 
 typedef struct {
-char * hashfunction; // nom de la fonction de hachage
+int hashfunction;// numéro de la fonction de hachage
 int nbSlots; // nombre d’alvéoles
 t_list * slots; // taille définie à l'exécution
 } t_hashtable;
 
-typedef int (*function)(t_key);
+typedef int (*function)(t_key, t_hashtable);
 
 
 // ----------------------------------------------------------------------

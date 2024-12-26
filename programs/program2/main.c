@@ -11,7 +11,7 @@ int main(int argc, char ** argv) {
     t_metadata meta;
 
     // Default hash function
-    char * defaultHash = "first_ASCII";
+    int defaultHash = 0;
 
     // Variable containing all the information about the hashtable
     t_hashtable hash;
@@ -31,8 +31,9 @@ int main(int argc, char ** argv) {
     // Sets the hash function to be used, default being first_ASCII
     hash.hashfunction = defaultHash;
     if (argc == 4) {
-        hash.hashfunction = argv[3];
+        hash.hashfunction = atoi(argv[3]);
     }
+    function hashFunctionList[] = {&first_ASCII};
 
 	// STEP 1 : IMPLEMENTING METADATA WITH : SEPARATOR, NB_OF_FIELDS, KEY_NAME, FIELD_NAMES
     
@@ -87,32 +88,39 @@ int main(int argc, char ** argv) {
         free(field_table);
     }
 
-	// STEP 2 : CREATING THE DICTIONNARY
-	
-    t_tupletable * dico1 = malloc(sizeof(t_tupletable));	// Defines a pointer towards a dictionnary.
-    int len_dic = 0;
+	// STEP 2 : CREATING THE HASHTABLE
 
-    while (fgets(temp, MAXLEN, anagrammeFile) != NULL) {	// Reads lines until the end of file.
-        split(meta.sep, temp, meta.nbFields, dico1->tuples[len_dic].key, dico1->tuples[len_dic].value);
-        len_dic++; //filling dico1 with its tuples
+    int h = 0;
+    int nbCollisions;
+    hash.slots = malloc(sizeof(t_list) * hash.nbSlots);
+    
+    while (fgets(temp, MAXLEN, anagrammeFile) != NULL) {
+        t_tuple * tuple = malloc(sizeof(*tuple));
+        split(meta.sep, temp, meta.nbFields, tuple->key, tuple->value);
+        h = hashFunctionList[hash.hashfunction](tuple->key, hash);
+        if (isEmpty(hash.slots[0])) nbCollisions--;
+        addHeadNode(*tuple, hash.slots[0]);
+        nbCollisions++;
     }
-	
-    dico1->nbTuples = len_dic; //number of keys added in dico1
+
 
 	
-    char finding[MAXLEN];
-    printf("Donnez le mot à trouver : \n");
-    // printf("%s", finding);
-    while (scanf("%99s", finding) != EOF){// we can search as many word as we want until we stop the program
+    
 
-        /* Calls the function print_tuples which handles 
-        the search of the specified word (finding) and displays the 
-        values of said key (if found) and the number of comparisons */
-        print_tuples(meta, dico1, finding);
+	
+    // char finding[MAXLEN];
+    // printf("Donnez le mot à trouver : \n");
+    // // printf("%s", finding);
+    // while (scanf("%99s", finding) != EOF){// we can search as many word as we want until we stop the program
+
+    //     /* Calls the function print_tuples which handles 
+    //     the search of the specified word (finding) and displays the 
+    //     values of said key (if found) and the number of comparisons */
+    //     print_tuples(meta, dico1, finding);
        
-        printf("\nDonnez le mot à trouver : \n");
+    //     printf("\nDonnez le mot à trouver : \n");
 
-    }
+    // }
 
     
 	
