@@ -65,8 +65,7 @@ int main(int argc, char ** argv) {
 
         // Retrieves the fieldNames  
         split(meta.sep, temp, meta.nbFields, meta.key, field_table);
-        meta.fieldNames = field_table;
-        free(field_table);       
+        meta.fieldNames = field_table;   
     }
 	
 	else {
@@ -85,7 +84,6 @@ int main(int argc, char ** argv) {
         // Retrieves the fieldNames  
         split(meta.sep, temp, meta.nbFields, meta.key, field_table);
         meta.fieldNames = field_table; 
-        free(field_table);
     }
 
 	// STEP 2 : CREATING THE HASHTABLE
