@@ -131,7 +131,7 @@ void split(char sep, char * txt, int nbFields, t_key key, t_field * schema_field
 	/* 	This loop retrieves all the fields while separating words between 
 		the separator and ignoring \n and \0 characters */
 	while ((i < l) && (k < nbFields)) {
-        while ((txt[i] != sep) && (txt[i] != '\0') && (txt[i] != '\n')){
+        while ((txt[i] != sep) && (txt[i] != '\0') && (txt[i] != '\n') && (txt[i] != '\r')){
             schema_field_table[k][j] = txt[i];
             j++;
             i++;
