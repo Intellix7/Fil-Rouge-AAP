@@ -4,4 +4,5 @@ Authors :
 COMAN Timothée,
 HACHIBA Yacine,
 NEVEUX Baptiste,
-RIVIERE Candice
+RIVIERE Candice  
+- Program 1 finished

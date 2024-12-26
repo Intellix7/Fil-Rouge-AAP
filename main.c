@@ -49,7 +49,8 @@ int main(int argc, char ** argv) {
 
         // Retrieves the fieldNames  
         split(meta.sep, temp, meta.nbFields, meta.key, field_table);
-        meta.fieldNames = field_table;       
+        meta.fieldNames = field_table;
+        free(field_table);       
     }
 	
 	else {
@@ -68,6 +69,7 @@ int main(int argc, char ** argv) {
         // Retrieves the fieldNames  
         split(meta.sep, temp, meta.nbFields, meta.key, field_table);
         meta.fieldNames = field_table; 
+        free(field_table);
     }
 
 	// STEP 2 : CREATING THE DICTIONNARY
@@ -82,29 +84,20 @@ int main(int argc, char ** argv) {
 	
     dico1->nbTuples = len_dic; //number of keys added in dico1
 
-    // printf("%s\n", dico1->tuples[5].value[5]);
-
 	
     char finding[MAXLEN];
-    printf("Donnez le mot à trouver : ");
+    printf("Donnez le mot à trouver : \n");
     // printf("%s", finding);
     while (scanf("%99s", finding) != EOF){// we can search as many word as we want until we stop the program
 
-        for(int k=0; k < dico1->nbTuples; k++){
-            if(strcmp(finding, dico1->tuples[k].key) == 0){ //compare the word we are looking for with the keys 
-                printf("%d mots indexés \n", dico1->nbTuples);
-                printf("Recherche de %s : trouvé ! nb comparaisons : %d \n", finding, k); // the word has been found
-                break;
-                }
-            if(k==dico1->nbTuples){
-                printf("Recherche de %s : échec ! nb comparaisons : %d \n", finding, dico1->nbTuples); // the word hasn't been found
-            }
-        }
+        /* Calls the function print_tuples which handles 
+        the search of the specified word (finding) and displays the 
+        values of said key (if found) and the number of comparisons */
+        print_tuples(meta, dico1, finding);
        
-        printf("Donnez le mot à trouver : ");
+        printf("\nDonnez le mot à trouver : \n");
 
     }
- 	*/   
 
     
 	
