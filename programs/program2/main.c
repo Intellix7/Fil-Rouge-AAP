@@ -33,7 +33,7 @@ int main(int argc, char ** argv) {
     if (argc == 4) {
         hash.hashfunction = atoi(argv[3]);
     }
-    function hashFunctionList[] = {&first_ASCII};
+    function hashFunctionList[] = {&first_ASCII, &sum_ASCII};
 
 	// STEP 1 : IMPLEMENTING METADATA WITH : SEPARATOR, NB_OF_FIELDS, KEY_NAME, FIELD_NAMES
     
