@@ -44,6 +44,8 @@ int nbSlots; // nombre d’alvéoles
 t_list * slots; // taille définie à l'exécution
 } t_hashtable;
 
+typedef int (*function)(t_key);
+
 
 // ----------------------------------------------------------------------
 // 2. PROTOTYPES AND DOCUMENTATION
@@ -160,10 +162,10 @@ void print_tuples(t_metadata data, t_tupletable * dico, char * key) {
 		printf("%s : %s\n", data.key, key); // mot : key
 		
 		for (int k = 0; k < data.nbFields-1; k++) {
-			if (dico->tuples[index_key].value[k][0] != '\0') {
+			if ((dico->tuples[index_key].value[k][0] != '\0')) {
 				printf("%s: %s\n", data.fieldNames[k], dico->tuples[index_key].value[k]); // anagramme k: ...
 			}
-			else {
+			else if (strcmp(data.fieldNames[k], "") != 0){
 				printf("%s: X\n", data.fieldNames[k]); // anagramme k: X
 			}
 		}
