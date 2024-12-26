@@ -39,7 +39,7 @@ int main(int argc, char ** argv) {
     
 	// STEP 1.1 : SEPARATOR
     fgets(temp, MAXLEN, anagrammeFile);
-    while (strlen(temp) > 2) {     // A line is only read if it contains only one character.
+    while (strcspn(temp, "\n\r") > 1) { // A line is only read if it contains only one character.
         fgets(temp, MAXLEN, anagrammeFile);
     }
     meta.sep = *temp; 	// Gets separator.
