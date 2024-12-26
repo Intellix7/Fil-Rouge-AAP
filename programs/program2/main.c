@@ -26,7 +26,7 @@ int main(int argc, char ** argv) {
     FILE * anagrammeFile = fopen(argv[1], "r");
 
     // Stores the number of slots of the hash function
-    int nbAlveoles = atoi(argv[2]);
+    hash.nbSlots = atoi(argv[2]);
 
     // Sets the hash function to be used, default being first_ASCII
     hash.hashfunction = defaultHash;
@@ -88,37 +88,38 @@ int main(int argc, char ** argv) {
 
 	// STEP 2 : CREATING THE HASHTABLE
 
-    int h = 0;
-    int nbCollisions;
+    int h;
+    int nbCollisions = 0;
+    int motsIndexes = 0;
     hash.slots = malloc(sizeof(t_list) * hash.nbSlots);
     
     while (fgets(temp, MAXLEN, anagrammeFile) != NULL) {
         t_tuple * tuple = malloc(sizeof(*tuple));
+
         split(meta.sep, temp, meta.nbFields, tuple->key, tuple->value);
         h = hashFunctionList[hash.hashfunction](tuple->key, hash);
-        if (isEmpty(hash.slots[0])) nbCollisions--;
-        addHeadNode(*tuple, hash.slots[0]);
+        if (isEmpty(hash.slots[h])) nbCollisions--;
+        hash.slots[h] = addHeadNode(*tuple, hash.slots[h]);
         nbCollisions++;
+        motsIndexes++;
     }
-
-
-	
     
 
 	
-    // char finding[MAXLEN];
-    // printf("Donnez le mot à trouver : \n");
-    // // printf("%s", finding);
-    // while (scanf("%99s", finding) != EOF){// we can search as many word as we want until we stop the program
+    char finding[MAXLEN];
+    printf("Nombre de mots indexés : %d\nNombre de collisions : %d\n", motsIndexes, nbCollisions);
+    printf("Donnez le mot à trouver : \n");
+    // printf("%s", finding);
+    while (scanf("%99s", finding) != EOF){// we can search as many word as we want until we stop the program
 
-    //     /* Calls the function print_tuples which handles 
-    //     the search of the specified word (finding) and displays the 
-    //     values of said key (if found) and the number of comparisons */
-    //     print_tuples(meta, dico1, finding);
+        /* Calls the function print_tuples which handles 
+        the search of the specified word (finding) and displays the 
+        values of said key (if found) and the number of comparisons */
+        print_hastable(hashFunctionList, meta, hash, finding);
        
-    //     printf("\nDonnez le mot à trouver : \n");
+        printf("\nDonnez le mot à trouver : \n");
 
-    // }
+    }
 
     
 	

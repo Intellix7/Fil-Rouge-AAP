@@ -88,6 +88,8 @@ It should display something like the following :
 "Recherche de [key] : échec ! nb comparaisons : [...]"
 */
 
+void print_hastable(function * hashFunctionList, t_metadata data, t_hashtable hash, t_key key);
+
 // 2.2 CHAINED LIST FUNCTIONS
 
 int isEmpty(t_list li);
@@ -104,9 +106,13 @@ int first_ASCII(t_key key, t_hashtable hash);
 /* 	first_ASCII takes two parameters : 
 	- a key
 	- a t_hashtable object holding the information about the hashtable
-Returns the ASCII code of its first character mod 
-[the number of hash slots defined in the console arguments]  
-*/
+Returns the ASCII code of its first character mod hash.nbslots */
+
+int sum_ASCII(t_key, t_hashtable hash);
+/* 	first_ASCII takes two parameters : 
+	- a key
+	- a t_hashtable object holding the information about the hashtable
+Returns the sum of the ASCII codes of all the characters in key mod hash.nbslots */
 
 // ----------------------------------------------------------------------
 // 3. FUNCTIONS
@@ -172,6 +178,35 @@ void print_tuples(t_metadata data, t_tupletable * dico, char * key) {
 	}		
 }
 
+void print_hastable(function * hashFunctionList, t_metadata data, t_hashtable hash, t_key key){
+	int h = hashFunctionList[hash.hashfunction](key, hash);
+	int nbComparisons = 0;
+	t_list temp = hash.slots[h];
+	while ((!isEmpty(temp)) && (strcmp(temp->data.key , key) != 0)) {
+		nbComparisons++;
+		temp = temp->pNext;
+	}
+
+	if (temp == NULL) {
+		printf("Recherche de %s : échec ! nb comparaisons : %d\n", key, nbComparisons+1);
+	}
+	else {
+		printf("Recherche de %s : trouvé ! nb comparaisons : %d\n", key, nbComparisons+1);
+		printf("%s : %s\n", data.key, key); // mot : key
+
+		for (int k = 0; k < data.nbFields-1; k++) {
+			if (temp->data.value[k][0] != '\0') {
+				printf("%s: %s\n", data.fieldNames[k], temp->data.value[k]); // anagramme k: ...
+			}
+			else if (strcmp(data.fieldNames[k], "") != 0){
+				printf("%s: X\n", data.fieldNames[k]); // anagramme k: X
+			}
+		}
+	}
+
+	
+}
+
 // 3.2 CHAINED LIST FUNCTIONS
 
 int isEmpty(t_list li){
@@ -217,4 +252,13 @@ t_list removeHeadNode(t_list li){
 
 int first_ASCII(t_key key, t_hashtable hash){
 	return (int)(key[0] % hash.nbSlots);
+}
+
+int sum_ASCII(t_key key, t_hashtable hash){
+	int s = 0;
+	for (int i = 0; i < strlen(key); i++) {
+		s += (int)key[i];
+	}
+	return (s % hash.nbSlots);
+	
 }
