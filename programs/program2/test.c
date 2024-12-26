@@ -10,5 +10,5 @@ int main() {
     printf("%d\n", h);
 
     hash.slots = malloc(sizeof(t_list) * hash.nbSlots);
-    printf("%d", strlen("a"));
+    // printf("%d", strlen("a"));
 }
