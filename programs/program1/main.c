@@ -16,7 +16,7 @@ int main(int argc, char ** argv) {
         exit(EXIT_FAILURE);
     }
     
-	// Opens the datafile.
+	// // Opens the datafile.
     FILE * anagrammeFile = fopen(argv[1], "r");
 
 	// STEP 1 : IMPLEMENTING METADATA WITH : SEPARATOR, NB_OF_FIELDS, KEY_NAME, FIELD_NAMES
@@ -49,8 +49,7 @@ int main(int argc, char ** argv) {
 
         // Retrieves the fieldNames  
         split(meta.sep, temp, meta.nbFields, meta.key, field_table);
-        meta.fieldNames = field_table;
-        free(field_table);       
+        meta.fieldNames = field_table;       
     }
 	
 	else {
@@ -69,7 +68,6 @@ int main(int argc, char ** argv) {
         // Retrieves the fieldNames  
         split(meta.sep, temp, meta.nbFields, meta.key, field_table);
         meta.fieldNames = field_table; 
-        free(field_table);
     }
 
 	// STEP 2 : CREATING THE DICTIONNARY
@@ -85,22 +83,20 @@ int main(int argc, char ** argv) {
     dico1->nbTuples = len_dic; //number of keys added in dico1
 
 	
-    // char finding[MAXLEN];
-    // printf("Donnez le mot à trouver : \n");
-    // while (scanf("%99s", finding) != EOF){// we can search as many word as we want until we stop the program
+    char finding[MAXLEN];
+    printf("Mots indexés : %d\n", len_dic);
+    printf("Donnez le mot à trouver : \n");
+    // printf("%s", finding);
+    while (scanf("%99s", finding) != EOF){// we can search as many word as we want until we stop the program
 
-        // /* Calls the function print_tuples which handles 
-        // the search of the specified word (finding) and displays the 
-        // values of said key (if found) and the number of comparisons */
-        // print_tuples(meta, dico1, finding);
+        print_tuples(meta, dico1, finding);
        
-        // printf("\nDonnez le mot à trouver : \n");
+        printf("\nDonnez le mot à trouver : \n");
 
-    // }
-	print_tuples(meta, dico1, finding);
+    }
 
     
 	
     fclose(anagrammeFile);
-	
+
 }
