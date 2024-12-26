@@ -85,22 +85,22 @@ int main(int argc, char ** argv) {
     dico1->nbTuples = len_dic; //number of keys added in dico1
 
 	
-    char finding[MAXLEN];
-    printf("Donnez le mot à trouver : \n");
-    // printf("%s", finding);
-    while (scanf("%99s", finding) != EOF){// we can search as many word as we want until we stop the program
+    // char finding[MAXLEN];
+    // printf("Donnez le mot à trouver : \n");
+    // while (scanf("%99s", finding) != EOF){// we can search as many word as we want until we stop the program
 
-        /* Calls the function print_tuples which handles 
-        the search of the specified word (finding) and displays the 
-        values of said key (if found) and the number of comparisons */
-        print_tuples(meta, dico1, finding);
+        // /* Calls the function print_tuples which handles 
+        // the search of the specified word (finding) and displays the 
+        // values of said key (if found) and the number of comparisons */
+        // print_tuples(meta, dico1, finding);
        
-        printf("\nDonnez le mot à trouver : \n");
+        // printf("\nDonnez le mot à trouver : \n");
 
-    }
+    // }
+	print_tuples(meta, dico1, finding);
 
     
 	
     fclose(anagrammeFile);
-
+	
 }
