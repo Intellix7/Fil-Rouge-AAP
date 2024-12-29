@@ -1,7 +1,6 @@
 // Define a guard (= do not include this file more than once)
 #ifndef _AAP_DEFINITIONS_H
 #define _AAP_DEFINITIONS_H	1
-#endif
 
 #include <stdio.h>
 #include <string.h>
@@ -264,8 +263,10 @@ int first_ASCII(t_key key, t_hashtable hash) {
 
 int sum_ASCII(t_key key, t_hashtable hash) {
     int s = 0;
-    for (int i = 0; i < strlen(key); i++) {
+    for (size_t i = 0; i < strlen(key); i++) {
         s += (int) key[i];
     }
     return (s % hash.nbSlots);
 }
+
+#endif

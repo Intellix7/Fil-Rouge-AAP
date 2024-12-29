@@ -3,29 +3,28 @@
 
 
 int main(int argc, char **argv) {
-    // Creates the temporary string that will hold the text retrieved from the file.
-    char temp[MAX_LEN];
-
-    // Variable containing the metadatas from the file (SEPARATOR, NB_OF_FIELDS, KEY_NAME, FIELD_NAMES).
-    t_metadata meta;
-
     // Halts the program if the user uses the wrong syntax.
     if (argc < 2) {
         printf("Utilisation :\n./programme <nom du fichier>\n");
         exit(EXIT_FAILURE);
     }
 
-    // // Opens the datafile.
+    // Opens the datafile.
     FILE *anagrammeFile = fopen(argv[1], "r");
 
     // STEP 1 : IMPLEMENTING METADATA WITH : SEPARATOR, NB_OF_FIELDS, KEY_NAME, FIELD_NAMES
 
+    // Creates the temporary string that will hold the text retrieved from the file.
+    char temp[MAX_LEN];
     // STEP 1.1 : SEPARATOR
     fgets(temp, MAX_LEN, anagrammeFile);
     while (strcspn(temp, "\n\r") > 1) {
         // A line is only read if it contains only one character.
         fgets(temp, MAX_LEN, anagrammeFile);
     }
+
+    // Variable containing the metadatas from the file (SEPARATOR, NB_OF_FIELDS, KEY_NAME, FIELD_NAMES).
+    t_metadata meta;
     meta.sep = *temp; // Gets separator.
 
     // STEP 1.2 : NB_OF_FIELDS & FIELD_NAMES
@@ -78,6 +77,7 @@ int main(int argc, char **argv) {
         split(meta.sep, temp, meta.nbFields, dico1->tuples[len_dic].key, dico1->tuples[len_dic].value);
         len_dic++; //filling dico1 with its tuples
     }
+    fclose(anagrammeFile);
 
     dico1->nbTuples = len_dic; //number of keys added in dico1
 
@@ -91,5 +91,4 @@ int main(int argc, char **argv) {
         printf("\nDonnez le mot à trouver : \n");
     }
 
-    fclose(anagrammeFile);
 }
