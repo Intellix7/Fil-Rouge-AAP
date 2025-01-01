@@ -101,7 +101,7 @@ It should display something like the following :
 
 void print_hastable(function *hashFunctionList, t_metadata data, t_hashtable hash, t_key key);
 
-void export_hashtable(t_metadata data, t_hashtable hash, FILE *fileOut, char slotSeparator);
+void export_hashtable(t_metadata data, t_hashtable hash, FILE *fileOut, char slotSeparator, FILE *countFile);
 
 // 2.2 CHAINED LIST FUNCTIONS
 
@@ -242,28 +242,41 @@ void print_hastable(function *hashFunctionList, t_metadata data, t_hashtable has
     }
 }
 
-void export_hashtable(t_metadata data, t_hashtable hash, FILE *fileOut, char slotSeparator)
+void export_hashtable(t_metadata data, t_hashtable hash, FILE *fileOut, char slotSeparator, FILE *countFile)
 {
     t_list temp_list;
     int k;
+    int nbKey;
+    fprintf(fileOut, "%c\n%d\n", data.sep , data.nbFields);
 
     for (int i = 0; i < hash.nbSlots; i++)
     {
         temp_list = hash.slots[i];
         // fprintf(fileOut, "%d", i);
+      
+        if(isEmpty(temp_list)) continue;
+        //printf("*%d*",i);
+        
+        fprintf(fileOut, "%d\n" , i);
+        fprintf(countFile, "%d," ,i);
+        nbKey = 0;
         while (!isEmpty(temp_list))
         {
             fprintf(fileOut, "%s", temp_list->data.key);
             k = 0;
+           
             while ((temp_list->data.value[k][0] != '\0') && (k < data.nbFields - 1))
             {
                 fprintf(fileOut, "%c%s", data.sep, temp_list->data.value[k]);
                 k++;
             }
+           
             fprintf(fileOut, "\n");
             temp_list = temp_list->pNext;
+            nbKey++ ; 
         }
-        fprintf(fileOut, "%c\n", slotSeparator);
+        fprintf(countFile, " %d\n", nbKey);
+        //fprintf(fileOut, "%c\n", slotSeparator);
     }
 }
 

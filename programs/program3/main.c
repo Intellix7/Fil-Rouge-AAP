@@ -27,6 +27,9 @@ int main(int argc, char **argv)
         The input and the output are handled in stdIn and stdOut */
     FILE *fileIn = stdin, *fileOut = stdout;
 
+    FILE *countFile = fopen("countFile", "w");
+
+
     // This table stores the different hash functions available
     function hashFunctionList[] = {&first_ASCII, &sum_ASCII};
 
@@ -55,12 +58,17 @@ int main(int argc, char **argv)
         case 'o':
             fileOut = fopen(string, "w");
             break;
+        
+        case 'c':
+            countFile = fopen(string, "w");
+            break;
 
         default:
             break;
         }
     }
-
+    
+    
     // printf("%d, %d\n", hash.hashfunction, hash.nbSlots);
     // fgets(temp, MAX_LEN, fileIn);
     // fprintf(fileOut, temp);
@@ -145,5 +153,5 @@ int main(int argc, char **argv)
     // fprintf(fileOut, "%d", 1);
 
     // Not sure what the slot separator should be here
-    export_hashtable(meta, hash, fileOut, '#');
+    export_hashtable(meta, hash, fileOut, '#', countFile);
 }
