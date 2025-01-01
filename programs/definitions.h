@@ -247,36 +247,44 @@ void export_hashtable(t_metadata data, t_hashtable hash, FILE *fileOut, char slo
     t_list temp_list;
     int k;
     int nbKey;
-    fprintf(fileOut, "%c\n%d\n", data.sep , data.nbFields);
+    fprintf(fileOut, "%c\n%d\n%d\n%d\n", data.sep, data.nbFields, hash.hashfunction, hash.nbSlots);
+
+    fprintf(fileOut, "%s", data.key);
+    for (int i = 0; i < data.nbFields; i++)
+    {
+        fprintf(fileOut, "%c%s", data.sep, data.fieldNames[i]);
+    }
+    fprintf(fileOut, "\n");
 
     for (int i = 0; i < hash.nbSlots; i++)
     {
         temp_list = hash.slots[i];
         // fprintf(fileOut, "%d", i);
-      
-        if(isEmpty(temp_list)) continue;
-        //printf("*%d*",i);
-        
-        fprintf(fileOut, "%d\n" , i);
-        fprintf(countFile, "%d," ,i);
+
+        if (isEmpty(temp_list))
+            continue;
+        // printf("*%d*",i);
+
+        fprintf(fileOut, "#%d\n", i);
+        fprintf(countFile, "%d,", i);
         nbKey = 0;
         while (!isEmpty(temp_list))
         {
             fprintf(fileOut, "%s", temp_list->data.key);
             k = 0;
-           
+
             while ((temp_list->data.value[k][0] != '\0') && (k < data.nbFields - 1))
             {
                 fprintf(fileOut, "%c%s", data.sep, temp_list->data.value[k]);
                 k++;
             }
-           
+
             fprintf(fileOut, "\n");
             temp_list = temp_list->pNext;
-            nbKey++ ; 
+            nbKey++;
         }
         fprintf(countFile, " %d\n", nbKey);
-        //fprintf(fileOut, "%c\n", slotSeparator);
+        // fprintf(fileOut, "%c\n", slotSeparator);
     }
 }
 
