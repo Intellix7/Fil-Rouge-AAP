@@ -9,3 +9,6 @@
 
 # Ignores all .idea files (CLion specific)
 .idea/
+
+# VSCode specific
+.vscode/
