@@ -143,6 +143,9 @@ int sum_ASCII(t_key, t_hashtable hash);
     - a t_hashtable object holding the information about the hashtable
 Returns the sum of the ASCII codes of all the characters in key mod hash.nbslots */
 
+#define MAX_HASH_FUNCTION 2
+function hashFunctionList[] = {&first_ASCII, &sum_ASCII};
+
 // ----------------------------------------------------------------------
 // 3. FUNCTIONS
 

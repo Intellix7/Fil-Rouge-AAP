@@ -33,9 +33,10 @@ int main(int argc, char **argv)
     hash.hashfunction = defaultHash;
     if (argc == 4)
     {
-        hash.hashfunction = atoi(argv[3]);
+        int n = atoi(argv[3]);
+        if (n < MAX_HASH_FUNCTION)
+            hash.hashfunction = n;
     }
-    function hashFunctionList[] = {&first_ASCII, &sum_ASCII};
 
     // STEP 1 : IMPLEMENTING METADATA WITH : SEPARATOR, NB_OF_FIELDS, KEY_NAME, FIELD_NAMES
 

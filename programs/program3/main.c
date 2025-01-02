@@ -29,9 +29,6 @@ int main(int argc, char **argv)
 
     FILE *countFile = fopen("countFile", "w");
 
-    // This table stores the different hash functions available
-    function hashFunctionList[] = {&first_ASCII, &sum_ASCII};
-
     char id;
     char *string;
 
@@ -42,7 +39,9 @@ int main(int argc, char **argv)
         switch (id)
         {
         case 'h':
-            hash.hashfunction = atoi(string);
+            int n = atoi(string);
+            if (n < MAX_HASH_FUNCTION)
+                hash.hashfunction = n;
             break;
 
         case 's':

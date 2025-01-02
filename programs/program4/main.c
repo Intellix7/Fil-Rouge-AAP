@@ -12,9 +12,6 @@ int main(int argc, char **argv)
     // Variable containing the metametas from the file (SEPARATOR, NB_OF_FIELDS, KEY_NAME, FIELD_NAMES).
     t_metadata meta;
 
-    // List of hash functions
-    function hashFunctionList[] = {&first_ASCII, &sum_ASCII};
-
     // Halts the program if the user uses the wrong syntax.
     if (argc < 2)
     {
