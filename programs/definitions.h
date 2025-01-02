@@ -49,11 +49,12 @@ typedef t_node *t_list;
 
 typedef struct
 {
-    int hashfunction; // numéro de la fonction de hachage
-    int nbSlots;      // nombre d’alvéoles
-    t_list *slots;    // taille définie à l'exécution
+    int hashfunction; // hash function ID
+    int nbSlots;      // Number of slots
+    t_list *slots;    // Slots table
 } t_hashtable;
 
+// special type for a list of hash function pointers
 typedef int (*function)(t_key, t_hashtable);
 
 // ----------------------------------------------------------------------
@@ -100,8 +101,19 @@ It should display something like the following :
 */
 
 void print_hastable(function *hashFunctionList, t_metadata data, t_hashtable hash, t_key key);
+/* Takes 4 parameters :
+    - The hash function list
+    - t_metadata data which contains information about parsed file
+    - t_hashtable hash which contains information about the hash table
+    - the key to search for
+Does the same thing as print_tuples but with the hash table implementation */
 
-void export_hashtable(t_metadata data, t_hashtable hash, FILE *fileOut, char slotSeparator, FILE *countFile);
+void export_hashtable(t_metadata data, t_hashtable hash, FILE *fileOut, FILE *countFile);
+/* Takes 4 parameters :
+    - Data about parsed file
+    - Data about the hash table
+    - The output file where the hash table will be exprted
+    - The countfile where information about slot occupation will be exported */
 
 // 2.2 CHAINED LIST FUNCTIONS
 
@@ -109,7 +121,6 @@ int isEmpty(t_list li);
 
 t_tuple getFirstVal(t_list li);
 
-// void showList(t_list li);
 t_list newList();
 
 t_list addHeadNode(t_tuple data, t_list li);
@@ -226,47 +237,51 @@ void print_hastable(function *hashFunctionList, t_metadata data, t_hashtable has
     else
     {
         printf("Recherche de %s : trouvé ! nb comparaisons : %d\n", key, nbComparisons + 1);
-        printf("%s : %s\n", data.key, key); // mot : key
+        printf("%s : %s\n", data.key, key);
 
         for (int k = 0; k < data.nbFields - 1; k++)
         {
             if (temp->data.value[k][0] != '\0')
             {
-                printf("%s: %s\n", data.fieldNames[k], temp->data.value[k]); // anagramme k: ...
+                printf("%s: %s\n", data.fieldNames[k], temp->data.value[k]);
             }
             else if (strcmp(data.fieldNames[k], "") != 0)
             {
-                printf("%s: X\n", data.fieldNames[k]); // anagramme k: X
+                printf("%s: X\n", data.fieldNames[k]);
             }
         }
     }
 }
 
-void export_hashtable(t_metadata data, t_hashtable hash, FILE *fileOut, char slotSeparator, FILE *countFile)
+void export_hashtable(t_metadata data, t_hashtable hash, FILE *fileOut, FILE *countFile)
 {
+    // Arbitrary choice...
+    char tupleSeparator = '<';
+
     t_list temp_list;
     int k;
     int nbKey;
-    fprintf(fileOut, "%c\n%d\n%d\n%d\n", data.sep, data.nbFields, hash.hashfunction, hash.nbSlots);
+    // Prints to output file relevant information to reconstruct the hash table if needed
+    fprintf(fileOut, "%c\n%c\n%d\n%d\n%d\n", data.sep, tupleSeparator, data.nbFields, hash.hashfunction, hash.nbSlots);
 
+    // Print Field names to output file
     fprintf(fileOut, "%s", data.key);
     for (int i = 0; i < data.nbFields; i++)
     {
         fprintf(fileOut, "%c%s", data.sep, data.fieldNames[i]);
     }
+
     fprintf(fileOut, "\n");
 
+    // Goes through all slots
     for (int i = 0; i < hash.nbSlots; i++)
     {
         temp_list = hash.slots[i];
-        // fprintf(fileOut, "%d", i);
 
-        if (isEmpty(temp_list))
-            continue;
-        // printf("*%d*",i);
-
-        fprintf(fileOut, "#%d\n", i);
+        // prints to the count file the slot number
         fprintf(countFile, "%d,", i);
+
+        // Prints each tuple in the slot on the same line, separated by the tupleSeparator
         nbKey = 0;
         while (!isEmpty(temp_list))
         {
@@ -279,12 +294,14 @@ void export_hashtable(t_metadata data, t_hashtable hash, FILE *fileOut, char slo
                 k++;
             }
 
-            fprintf(fileOut, "\n");
+            fprintf(fileOut, "%c", tupleSeparator);
             temp_list = temp_list->pNext;
             nbKey++;
         }
+
+        // Prints the slot occupation to count file
         fprintf(countFile, " %d\n", nbKey);
-        // fprintf(fileOut, "%c\n", slotSeparator);
+        fprintf(fileOut, "\n");
     }
 }
 
@@ -300,16 +317,6 @@ t_tuple getFirstVal(t_list li)
     assert(!isEmpty(li));
     return li->data;
 }
-
-// void showList(t_list li){
-//     int k = 0;
-//     printf("*** affichage de la liste ***\n");
-//     while (li != NULL){
-//         printf("Maillon %d, Valeur = %.1f\n", k, li->val);
-//         li = li->p;
-//         k++;
-//     }
-// }
 
 t_list newList()
 {
