@@ -66,6 +66,8 @@ int main(int argc, char **argv)
     {
         // Removes the end of line character at the end of user input
         finding[strcspn(finding, "\r\n")] = 0;
+        if (strcmp(finding, "") == 0)
+            break;
 
         // Resets the cursor position
         fseek(hashFile, origin, SEEK_SET);

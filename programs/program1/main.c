@@ -93,9 +93,12 @@ int main(int argc, char **argv)
     printf("Mots indexés : %d\n", len_dic);
     printf("Donnez le mot à trouver : \n");
     // printf("%s", finding);
-    while (scanf("%99s", finding) != EOF)
-    // we can search as many words as we want until we stop the program
+    while (fgets(finding, MAX_LEN, stdin) != NULL)
+    // we can search as many word as we want until we stop the program
     {
+        finding[strcspn(finding, "\r\n")] = 0;
+        if (strcmp(finding, "") == 0)
+            break;
         print_tuples(meta, dico1, finding);
         printf("\nDonnez le mot à trouver : \n");
     }

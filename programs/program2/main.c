@@ -119,10 +119,12 @@ int main(int argc, char **argv)
     printf("Nombre de mots indexés : %d\nNombre de collisions : %d\n", motsIndexes, nbCollisions);
     printf("Donnez le mot à trouver : \n");
     // printf("%s", finding);
-    while (scanf("%99s", finding) != EOF)
+    while (fgets(finding, MAX_LEN, stdin) != NULL)
     // we can search as many word as we want until we stop the program
     {
-
+        finding[strcspn(finding, "\r\n")] = 0;
+        if (strcmp(finding, "") == 0)
+            break;
         /* Calls the function print_tuples which handles
         the search of the specified word (finding) and displays the
         values of said key (if found) and the number of comparisons */
