@@ -102,4 +102,6 @@ int main(int argc, char **argv)
         print_tuples(meta, dico1, finding);
         printf("\nDonnez le mot à trouver : \n");
     }
+    free(dico1);
+    fclose(fileIn);
 }
