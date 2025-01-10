@@ -14,9 +14,7 @@ RIVIERE Candice
 
 List of hashFunctions :  
 ``` 
-- 0 : first_ASCII 
-```
-```
+- 0 : first_ASCII
 - 1 : sum_ASCII
 ```
 
