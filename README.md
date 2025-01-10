@@ -21,16 +21,18 @@ List of hashFunctions :
 default parameters : 
 ```
 <numberOfSlots> : 1000
-```
 <hashFunctionNumber> : 0
 <inputFilePath> : stdin (for program 3 only)
 <outputFilePath> : stdout (for program 3 only)
+```
 
 Compilation instructions : 
 
 cd into the "FIL-ROUGE-AAP" directory
 
+```
 - Program 1 : ./programs/program1/main <inputFilePath>
 - Program 2 : ./programs/program2/main <inputFilePath> <numberOfSlots> <hashFunctionNumber (optionnal)>
 - Program 3 : ./programs/program3/main -s<numberOfSlots> -h<hashFunctionNumber (optionnal)> -o<outputFilePath (optionnal)> -i<inputFilePath (optionnal)>
 - Program 4 : ./programs/program3/main <inputFilePath> 
+```
