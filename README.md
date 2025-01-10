@@ -13,11 +13,17 @@ RIVIERE Candice
 - Program 4 finished
 
 List of hashFunctions :  
-- 0 : first_ASCII
+``` 
+- 0 : first_ASCII 
+```
+```
 - 1 : sum_ASCII
+```
 
 default parameters : 
+```
 <numberOfSlots> : 1000
+```
 <hashFunctionNumber> : 0
 <inputFilePath> : stdin (for program 3 only)
 <outputFilePath> : stdout (for program 3 only)
